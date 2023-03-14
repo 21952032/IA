@@ -48,7 +48,7 @@ public class AStarAlgorithm : MonoBehaviour
                     neighbourNode.SetHCost(CalculateHCost(neighbourNode, endingNode));
                     neighbourNode.CalculateFCost();
 
-                    if (!openList.Contains(neighbourNode))
+                    if (!openList.Contains(neighbourNode) && neighbourNode.IsWalkable())
                     {
                         openList.Add(neighbourNode);
                     }

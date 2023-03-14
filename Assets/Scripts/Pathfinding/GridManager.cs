@@ -110,4 +110,11 @@ public class GridManager : MonoBehaviour
         //entonces habría gran cantidad de espacio que siempre devolverá false al estar entre 4 círculos
         //Con esta implementación comprobamos el cuadrado entero alrededor de nodePosition
     }
+
+    public Vector3 GetRandomNodeCoordinates()
+    {
+        int x = Mathf.RoundToInt(Random.Range(0, gridSizeX));
+        int y = Mathf.RoundToInt(Random.Range(0, gridSizeY));
+        return grid[x,y].GetWorldPosition();
+    }
 }

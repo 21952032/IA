@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class WanderingState : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GridManager gridManager;
+    public Vector3 GetTarget()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return gridManager.GetRandomNodeCoordinates();
     }
 }

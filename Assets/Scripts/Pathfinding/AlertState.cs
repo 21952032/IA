@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class AlertState : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Vector3 suspiciousLocation;
+    public GameObject alertFeedback;
+
+    private void OnEnable()
     {
-        
+        alertFeedback.SetActive(true);
+    }
+    private void OnDisable()
+    {
+        alertFeedback.SetActive(false);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            suspiciousLocation = collision.transform.position;
+            suspiciousLocation.y *= 0;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public Vector3 GetTarget()
     {
-        
+        return suspiciousLocation;
     }
 }
