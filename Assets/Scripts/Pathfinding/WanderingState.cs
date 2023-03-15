@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class WanderingState : MonoBehaviour
 {
-    public GridManager gridManager;
-    public Vector3 GetTarget()
+    private void OnEnable()
     {
-        return gridManager.GetRandomNodeCoordinates();
+        
     }
 }

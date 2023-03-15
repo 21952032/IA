@@ -12,16 +12,11 @@ public class GridManager : MonoBehaviour
     private float nodeDiameter;
     private int gridSizeX, gridSizeY;
 
-    private void Start()
+    public void CreateGrid()
     {
         nodeDiameter = nodeRadius * 2;
         gridSizeX = Mathf.RoundToInt(gridSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridSize.y / nodeDiameter);
-        CreateGrid();
-    }
-
-    private void CreateGrid()
-    {
         //Creamos la matriz grid
         grid = new PathfindingNode[gridSizeX, gridSizeY];
 
@@ -83,28 +78,31 @@ public class GridManager : MonoBehaviour
         return null;
     }
 
-    public void FindNodeInGrid(out int gridx, out int gridy, PathfindingNode node)
+    public Vector2 FindNodeInGrid(PathfindingNode node)
     {//Este método devuelve el índice en el grid de un nodo. Devuelve -1 si el nodo no está en el grid
-        gridx = -1;
-        gridy = -1;
-        for(int x = 0; x < gridSizeX; x++)
+        if (node == null)
+        {
+            Debug.Log("this node is null dumbshit");
+        }
+        for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)//Doble for para recorrer toda la matriz grid
             {
-                if(node == grid[x, y])
+                if (node.GetWorldPosition() == grid[x, y].GetWorldPosition())
                 {
-                    gridx = x;
-                    gridy = y;
+                    return new Vector2(x, y);
                 }
             }
         }
+        //Si no se encuentra el nodo se devuelve -1 -1
+        return new Vector2(-1,-1);
     }
     private bool CoordinatesInsideNode(Vector3 coordinates, Vector3 nodePosition)
     {
         return (coordinates.x >= nodePosition.x - nodeRadius &&
                 coordinates.x < nodePosition.x + nodeRadius &&
-                coordinates.y >= nodePosition.y - nodeRadius &&
-                coordinates.y < nodePosition.y + nodeRadius);
+                coordinates.z >= nodePosition.z - nodeRadius &&
+                coordinates.z < nodePosition.z + nodeRadius);
         //Esta función devuelve true si coordinates está dentro del nodo.
         //El nodo se ha tratado hasta ahora como un círculo, pero si esta función devolviera si coordinates está dentro del radio alrededor de nodePosition
         //entonces habría gran cantidad de espacio que siempre devolverá false al estar entre 4 círculos
@@ -115,6 +113,7 @@ public class GridManager : MonoBehaviour
     {
         int x = Mathf.RoundToInt(Random.Range(0, gridSizeX));
         int y = Mathf.RoundToInt(Random.Range(0, gridSizeY));
+
         return grid[x,y].GetWorldPosition();
     }
 }

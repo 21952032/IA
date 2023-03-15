@@ -11,12 +11,15 @@ public class StateMachine : MonoBehaviour
 
     private MonoBehaviour currentState;
 
-    private void Awake()
+    private void Start()
+    {
+        InitializeMachine();
+    }
+    private void InitializeMachine()
     {
         currentState = wanderingState;
         currentState.enabled = true;
     }
-
     public void ChangeCurrentStatus(MonoBehaviour newState)
     {
         if (currentState != null)
@@ -29,7 +32,15 @@ public class StateMachine : MonoBehaviour
 
     public Vector3 GetNewTarget()
     {
-        Vector3 target = new Vector3();
+        Vector3 target = new();
+        if(currentState != null)
+        {
+            Debug.Log("Current state is: "+currentState.ToString());
+        }
+        else
+        {
+            InitializeMachine();
+        }
         if (currentState == wanderingState)
         {
             target = gridManager.GetRandomNodeCoordinates();

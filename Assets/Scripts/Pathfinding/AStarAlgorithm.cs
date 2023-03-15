@@ -8,8 +8,12 @@ public class AStarAlgorithm : MonoBehaviour
     private List<PathfindingNode> openList;
     private HashSet<PathfindingNode> closedList;
 
-    private List<PathfindingNode> FindPath(Vector3 startingPoint, Vector3 endingPoint)
+    public List<PathfindingNode> FindPath(Vector3 startingPoint, Vector3 endingPoint)
     {
+        if (gridManager.grid == null)
+        {
+            gridManager.CreateGrid();
+        }
         PathfindingNode startingNode = gridManager.FindCorrespondingNode(startingPoint);//Conseguimos el nodo correspondiente a las coordenadas iniciales
         PathfindingNode endingNode = gridManager.FindCorrespondingNode(endingPoint);
         openList = new List<PathfindingNode> { startingNode };//Creamos la lista abierta y la lista cerrada
@@ -26,18 +30,18 @@ public class AStarAlgorithm : MonoBehaviour
         startingNode.SetGCost(0);
         startingNode.SetHCost(CalculateHCost(startingNode, endingNode));
         startingNode.CalculateFCost();
-
-        while (openList.Count >= 0)
+        while (openList.Count > 0)
         {
             PathfindingNode node = GetCheapestFCostNode(openList);
-            if (node == endingNode)
+            if (node.GetWorldPosition() == endingNode.GetWorldPosition())
             {
                 return CalculatePath(endingNode);
             }
-            openList.Remove(node);
             closedList.Add(node);
+            openList.Remove(node);
 
-            foreach (PathfindingNode neighbourNode in GetNeighbouringNodes(node))
+            List<PathfindingNode> neighbouringNodes = GetNeighbouringNodes(node);
+            foreach (PathfindingNode neighbourNode in neighbouringNodes)
             {
                 if (closedList.Contains(neighbourNode)) continue;
                 int estimatedCost = node.GetGCost() + CalculateHCost(node, neighbourNode);
@@ -63,7 +67,7 @@ public class AStarAlgorithm : MonoBehaviour
 
     private List<PathfindingNode> CalculatePath(PathfindingNode targetNode)
     {
-        List<PathfindingNode> path=new List<PathfindingNode>();
+        List<PathfindingNode> path = new List<PathfindingNode>();
         path.Add(targetNode);
         PathfindingNode node = targetNode;
         while (node.GetPreviousNode() != null)
@@ -101,57 +105,53 @@ public class AStarAlgorithm : MonoBehaviour
 
     private List<PathfindingNode> GetNeighbouringNodes(PathfindingNode node)
     {
-        int x;
-        int y;
-        gridManager.FindNodeInGrid(out x, out y, node);
+        float x, y;
+        x = node.GetWorldPosition().x;
+        y = node.GetWorldPosition().z;
         List<PathfindingNode> nodes = new List<PathfindingNode>();
 
-        if (x >= 0 && y >= 0)
+        //x-1
+        PathfindingNode potentialNode = gridManager.FindCorrespondingNode(new Vector3(x - 1, 0, y));
+        if (potentialNode != null)
         {
-            if (gridManager.grid[x - 1, y] != null)
-            {
-                nodes.Add(gridManager.grid[x - 1, y]);
-                if (gridManager.grid[x - 1, y - 1] != null)
-                {
-                    nodes.Add(gridManager.grid[x - 1, y - 1]);
-                }
-                if (y + 1 < gridManager.grid.Length)
-                {
-                    if (gridManager.grid[x - 1, y + 1] != null)
-                    {
-                        nodes.Add(gridManager.grid[x - 1, y + 1]);
-                    }
-                }
-            }
-            if (x + 1 < gridManager.grid.Length)
-            {
-                if (gridManager.grid[x + 1, y] != null)
-                {
-                    nodes.Add(gridManager.grid[x - 1, y]);
-                    if (gridManager.grid[x + 1, y - 1] != null)
-                    {
-                        nodes.Add(gridManager.grid[x - 1, y - 1]);
-                    }
-                    if (y + 1 < gridManager.grid.Length)
-                    {
-                        if (gridManager.grid[x + 1, y + 1] != null)
-                        {
-                            nodes.Add(gridManager.grid[x - 1, y - 1]);
-                        }
-                    }
-                }
-            }
-            if (gridManager.grid[x, y - 1] != null)
-            {
-                nodes.Add(gridManager.grid[x, y - 1]);
-            }
-            if (y + 1 < gridManager.grid.Length)
-            {
-                if (gridManager.grid[x, y + 1] != null)
-                {
-                    nodes.Add(gridManager.grid[x, y - 1]);
-                }
-            }
+            nodes.Add(potentialNode);
+        }
+        potentialNode = gridManager.FindCorrespondingNode(new Vector3(x - 1, 0, y - 1));
+        if (potentialNode != null)
+        {
+            nodes.Add(potentialNode);
+        }
+        potentialNode = gridManager.FindCorrespondingNode(new Vector3(x - 1, 0, y + 1));
+        if (potentialNode != null)
+        {
+            nodes.Add(potentialNode);
+        }
+        //x+1
+        potentialNode = gridManager.FindCorrespondingNode(new Vector3(x + 1, 0, y));
+        if (potentialNode != null)
+        {
+            nodes.Add(potentialNode);
+        }
+        potentialNode = gridManager.FindCorrespondingNode(new Vector3(x + 1, 0, y - 1));
+        if (potentialNode != null)
+        {
+            nodes.Add(potentialNode);
+        }
+        potentialNode = gridManager.FindCorrespondingNode(new Vector3(x + 1, 0, y + 1));
+        if (potentialNode != null)
+        {
+            nodes.Add(potentialNode);
+        }
+        //x
+        potentialNode = gridManager.FindCorrespondingNode(new Vector3(x, 0, y - 1));
+        if (potentialNode != null)
+        {
+            nodes.Add(potentialNode);
+        }
+        potentialNode = gridManager.FindCorrespondingNode(new Vector3(x, 0, y + 1));
+        if (potentialNode != null)
+        {
+            nodes.Add(potentialNode);
         }
         return nodes;
     }
