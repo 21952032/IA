@@ -155,4 +155,9 @@ public class AStarAlgorithm : MonoBehaviour
         }
         return nodes;
     }
+
+    public PathfindingNode GetNode(Vector3 coordinates)
+    {
+        return gridManager.FindCorrespondingNode(coordinates);
+    }
 }

@@ -49,6 +49,11 @@ public class PathfindingNode
         return isWalkable;
     }
 
+    public void SetWalkable(bool newWalkableState)
+    {
+        isWalkable=newWalkableState;
+    }
+
     public Vector3 GetWorldPosition()
     {
         return worldPosition;

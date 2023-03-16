@@ -35,7 +35,7 @@ public class StateMachine : MonoBehaviour
         Vector3 target = new();
         if(currentState != null)
         {
-            Debug.Log("Current state is: "+currentState.ToString());
+            Debug.Log("Getting new target...\n Current state is: "+currentState.ToString());
         }
         else
         {

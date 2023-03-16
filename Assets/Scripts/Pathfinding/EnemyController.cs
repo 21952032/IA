@@ -9,12 +9,16 @@ public class EnemyController : MonoBehaviour
     private StateMachine stateMachine;
     private AStarAlgorithm AStar;
     private List<PathfindingNode> path;
+    private PathfindingNode currentNode, previousNode;
 
     private void Awake()
     {
         stateMachine = GetComponent<StateMachine>();
         AStar = GetComponent<AStarAlgorithm>();
-        SetNewTarget(new Vector3(10,0,10));
+        SetNewTarget(new Vector3(Random.Range(-10f,10f),0, Random.Range(-10f, 10f)));
+        currentNode = AStar.GetNode(transform.position);
+        currentNode.SetWalkable(false);
+        previousNode = currentNode;
     }
 
     private void Update()
@@ -36,11 +40,19 @@ public class EnemyController : MonoBehaviour
                 SetNewTarget(stateMachine.GetNewTarget());
             }
         }
+
+        currentNode = AStar.GetNode(transform.position);
+        if (currentNode != previousNode)
+        {
+            previousNode.SetWalkable(true);
+            currentNode.SetWalkable(false);
+            previousNode = currentNode;
+        }
     }
 
     public void SetNewTarget(Vector3 newTarget)
     {
-        Debug.Log(newTarget);
+        Debug.Log("Next target is:"+newTarget);
         List<PathfindingNode> tempList= AStar.FindPath(transform.position, newTarget);
         if(tempList!= null)
         {
@@ -49,7 +61,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            Debug.Log("No path");
+            Debug.Log("No path found");
             SetNewTarget(stateMachine.GetNewTarget());
         }
     }
