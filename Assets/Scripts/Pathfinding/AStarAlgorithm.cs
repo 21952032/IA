@@ -14,10 +14,15 @@ public class AStarAlgorithm : MonoBehaviour
         {
             gridManager.CreateGrid();
         }
-        PathfindingNode startingNode = gridManager.FindCorrespondingNode(startingPoint);//Conseguimos el nodo correspondiente a las coordenadas iniciales
+        //Conseguimos el nodo correspondiente a las coordenadas iniciales y finales
+        PathfindingNode startingNode = gridManager.FindCorrespondingNode(startingPoint);
         PathfindingNode endingNode = gridManager.FindCorrespondingNode(endingPoint);
-        openList = new List<PathfindingNode> { startingNode };//Creamos la lista abierta y la lista cerrada
-        closedList = new HashSet<PathfindingNode>();//Utilizamos un HashSet en vez de lista como una optimización del código, pues solo necesitaremos saber si un nodo pertenece a la lista cerrada en el futuro
+
+        //Creamos la lista abierta y la lista cerrada
+        openList = new List<PathfindingNode> { startingNode };
+        closedList = new HashSet<PathfindingNode>();
+        //Utilizamos un HashSet en vez de lista como una optimización
+        //del código, pues solo necesitaremos saber si un nodo pertenece a la lista cerrada en el futuro
 
         //Asignamos un coste G infinito a todos los nodos y calculamos el coste F
         foreach (PathfindingNode node in gridManager.grid)

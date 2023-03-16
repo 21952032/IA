@@ -51,7 +51,8 @@ public class StateMachine : MonoBehaviour
         {
             alertScript=GetComponent<AlertState>();
             target=alertScript.GetTarget();
-            //Esta recursión es una medida de seguridad por si se da el caso de que el jugador sea detectado en un nodo imposible de alcanzar
+            //Esta recursión es una medida de seguridad por si se da el caso
+            //de que el jugador sea detectado en un nodo imposible de alcanzar
             if (!gridManager.FindCorrespondingNode(target).IsWalkable())
             {
                 ChangeCurrentStatus(wanderingState);

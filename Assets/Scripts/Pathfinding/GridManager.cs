@@ -21,7 +21,10 @@ public class GridManager : MonoBehaviour
         grid = new PathfindingNode[gridSizeX, gridSizeY];
 
         //Calculamos las coordenadas del punto inicial
-        Vector3 startingPoint = transform.position - Vector3.right * (gridSize.x / 2) - Vector3.forward * (gridSize.y / 2);//Con esto conseguimos el punto inferior izquierdo del grid
+        Vector3 startingPoint = transform.position - 
+                                Vector3.right * (gridSize.x / 2) - 
+                                Vector3.forward * (gridSize.y / 2);
+        //Con esto conseguimos el punto inferior izquierdo del grid
 
         for (int x = 0; x < gridSizeX; x++)
         {
@@ -29,8 +32,10 @@ public class GridManager : MonoBehaviour
             {
                 //Calculamos el punto exacto del mundo correspondiente a las coordenadas x,y del bucle
                 Vector3 worldPoint = startingPoint
-                                        + Vector3.right * (x * nodeDiameter + nodeRadius)//Con esto conseguimos el punto central del nodo en el eje X
-                                        + Vector3.forward * (y * nodeDiameter + nodeRadius);//Repetimos para el eje Z, consiguiendo el punto central del nodo y lo sumamos a startingPoint
+                                        + Vector3.right * (x * nodeDiameter + nodeRadius)
+                                        //Con esto conseguimos el punto central del nodo en el eje X
+                                        + Vector3.forward * (y * nodeDiameter + nodeRadius);
+                //Repetimos para el eje Z, consiguiendo el punto central del nodo y lo sumamos a startingPoint
                 //Calculamos las colisiones del punto
                 bool isWalkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableLayerMask));
                 //Creamos un nuevo nodo, le damos el punto y la booleana y se lo asignamos a una posición de la matriz
@@ -64,7 +69,8 @@ public class GridManager : MonoBehaviour
     }
 
     public PathfindingNode FindCorrespondingNode(Vector3 coordinates)
-    {//Esta función devuelve un nodo si encuentra la posición del mundo en un nodo o null si coordinates está en una posición fuera del grid
+    {//Esta función devuelve un nodo si encuentra la posición del mundo en un nodo
+     //o null si coordinates está en una posición fuera del grid
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)//Doble for para recorrer toda la matriz grid
@@ -104,7 +110,7 @@ public class GridManager : MonoBehaviour
                 coordinates.z >= nodePosition.z - nodeRadius &&
                 coordinates.z < nodePosition.z + nodeRadius);
         //Esta función devuelve true si coordinates está dentro del nodo.
-        //El nodo se ha tratado hasta ahora como un círculo, pero si esta función devolviera si coordinates está dentro del radio alrededor de nodePosition
+        //El nodo se ha tratado hasta ahora como un círculo, pero si esta función comprobara el radio alrededor de nodePosition
         //entonces habría gran cantidad de espacio que siempre devolverá false al estar entre 4 círculos
         //Con esta implementación comprobamos el cuadrado entero alrededor de nodePosition
     }

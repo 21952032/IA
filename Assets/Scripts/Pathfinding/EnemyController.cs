@@ -42,11 +42,13 @@ public class EnemyController : MonoBehaviour
                 transform.position = Vector3.Lerp(transform.position, target, speed * Time.deltaTime);
             }
             else
-            {//Si, por el contrario, hemos llegado al objetivo pedimos un nuevo objetivo. Este script no se encarga de distinguir objetivos, solo mueve al agente
+            {//Si, por el contrario, hemos llegado al objetivo pedimos un nuevo objetivo.
+             //Este script no se encarga de distinguir objetivos, solo mueve al agente
                 SetNewTarget(stateMachine.GetNewTarget());
             }
         }
-        //Este código marca el nodo en el que se sitúa el agente en este fotograma como no transitable. Desmarca el anterior una vez deja de estar en el nodo
+        //Este código marca el nodo en el que se sitúa el agente en este fotograma como no transitable.
+        //Desmarca el anterior una vez deja de estar en el nodo
         currentNode = AStar.GetNode(transform.position);
         if (currentNode != previousNode)
         {
