@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Pathfinding.unity
-    guid: 33b16f74ebf8c8a4cb02a30ab17bd34a
+    path: Assets/Scenes/Fuzzy.unity
+    guid: 12b69c7148e13fa42b99c350ff7287db
   m_configObjects: {}
