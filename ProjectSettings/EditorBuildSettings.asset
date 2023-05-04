@@ -4,13 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-<<<<<<< HEAD
-    path: Assets/ML-Agents/Examples/3DBall/3DBall.unity
-    guid: 6f62a2ccb3830437ea4e85a617e856b3
-=======
-    path: Assets/Scenes/Pathfinding.unity
-    guid: 33b16f74ebf8c8a4cb02a30ab17bd34a
->>>>>>> parent of 4816828 (Update EditorBuildSettings.asset)
+  m_Scenes: []
   m_configObjects: {}
