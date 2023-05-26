@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Flask.unity
+    guid: 3f3870125c9c2b0429d8be60a597f7d9
   m_configObjects: {}

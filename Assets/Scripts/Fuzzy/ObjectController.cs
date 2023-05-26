@@ -23,6 +23,7 @@ public class ObjectController : MonoBehaviour
         {
             if (target.x != transform.position.x || target.z != transform.position.z)
             {
+
             }
             else
             {
