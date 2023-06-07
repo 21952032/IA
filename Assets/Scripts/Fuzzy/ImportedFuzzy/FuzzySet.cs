@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 
 namespace FuzzyLogicPCL.FuzzySets
 {
@@ -230,6 +231,15 @@ namespace FuzzyLogicPCL.FuzzySets
             return Merge(fs1, fs2, Math.Max);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
         /// <summary>
         /// Private method computing the merging of two fuzzy sets
         /// </summary>

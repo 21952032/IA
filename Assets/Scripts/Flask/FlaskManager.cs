@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using System.IO;
+using TMPro;
 
 public class FlaskManager : MonoBehaviour
 {
     private string exePath = "Server/Server.exe";
-    private Process flaskProcess; // Store the Process object as a class member
-
+    private Process flaskProcess;
+    public TMP_Text debugText;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +21,7 @@ public class FlaskManager : MonoBehaviour
         string gameDataPath = Application.dataPath;
         string exeFilePath = Path.Combine(gameDataPath, exePath);
 
+        debugText.text = "Inicializando servidor Flask";
         if (File.Exists(exeFilePath))
         {
             ProcessStartInfo startInfo = new ProcessStartInfo(exeFilePath)
@@ -38,7 +40,7 @@ public class FlaskManager : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("Flask app executable not found at " + exeFilePath);
+            debugText.text="Flask app executable not found at " + exeFilePath;
         }
     }
 
@@ -53,7 +55,10 @@ public class FlaskManager : MonoBehaviour
 
     public void RestartServerButton()
     {
-        StopServerButton();
+        if (flaskProcess != null && !flaskProcess.HasExited)
+        {
+            flaskProcess.Kill(); // Stop the exe file when this method is called
+        }
         OpenFlaskApp();
     }
 }

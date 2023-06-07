@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.IO;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -6,33 +9,53 @@ using UnityEngine.UI;
 
 public class FlaskServerConnection : MonoBehaviour
 {
-    private string serverURL = "http://127.0.0.1:5000/upload";
-    public TextAsset audioFilePath;
-
-    public IEnumerator SendAudioFileToServer(string fileName)
+    private string serverURL = "http://localhost:5000/upload";
+    public TMP_Text debugText;
+    public AudioRecorder audioRecorder;
+    public Emotions emotions;
+    private IEnumerator SendAudioFileToServer(string fileName)
     {
-        if (audioFilePath == null)
-            yield break;
+        string serverFolderPath = Path.Combine(Application.dataPath, "Server", "uploads");
+        string filePath = Path.Combine(serverFolderPath, fileName);
 
-        string filePath = AssetDatabase.GetAssetPath(audioFilePath);
-        UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip(filePath, new AudioType());
+        if (!File.Exists(filePath))
+        {
+            debugText.text = "Audio file not found.";
+            yield break;
+        }
+
+        byte[] fileData = File.ReadAllBytes(filePath);
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("file", fileData, fileName, "audio/wav");
+
+        UnityWebRequest uwr = UnityWebRequest.Post(serverURL, form);
         yield return uwr.SendWebRequest();
 
-        if (uwr.error != null)
-            Debug.LogError($"Error uploading audio file: {uwr.error}");
+        if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError)
+        {
+            debugText.text = $"Error uploading audio file: {uwr.error}";
+        }
         else
-            Debug.Log("Audio file uploaded successfully");
+        {
+            debugText.text = "Audio file uploaded successfully";
+            int prediction= ProcessJsonResponse(uwr.downloadHandler.text);
+            emotions.NewEmotion(prediction);
+        }
+        audioRecorder.ReenableButton();
     }
 
-    public IEnumerator AskForPrediction(string predictionUrl)
+    private int ProcessJsonResponse(string jsonResponse)
     {
-        UnityWebRequest uwr = UnityWebRequest.Get(predictionUrl);
-        yield return uwr.SendWebRequest();
-
-        if (uwr.error != null)
-            Debug.LogError($"Error getting prediction: {uwr.error}");
-        else
-            Debug.Log("Prediction received: {uwr.downloadHandler.text}");
+        int prediction = -1;
+        try
+        {
+            prediction = int.Parse(jsonResponse);
+        }
+        catch (FormatException)
+        {
+            Debug.LogError("Error parsing JSON response as integer");
+        }
+        return prediction;
     }
 
     public void StartAudioUpload(string fileName)
@@ -40,8 +63,4 @@ public class FlaskServerConnection : MonoBehaviour
         StartCoroutine(SendAudioFileToServer(fileName));
     }
 
-    public void GetPrediction(string predictionUrl)
-    {
-        StartCoroutine(AskForPrediction(predictionUrl));
-    }
 }
